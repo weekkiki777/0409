@@ -41,3 +41,7 @@ bash <(wget -qO- https://raw.githubusercontent.com/hykazrf/0409/main/browser.sh)
 ```
 bash <(wget -qO- https://raw.githubusercontent.com/hykazrf/0409/main/btc)
 ```
+# quai挖矿 K1pool池
+```
+bash <(wget -qO- https://raw.githubusercontent.com/hykazrf/0409/main/quai)
+```
