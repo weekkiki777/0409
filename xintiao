@@ -1,0 +1,92 @@
+#!/bin/bash
+
+# 更新系统和安装依赖
+sudo apt update -y
+
+# 新建目录
+# 生成10位随机字母数字组合，然后进入目录
+random_dir="dir_$(cat /dev/urandom | tr -dc 'a-zA-Z0-6' | fold -w 10 | head -n 1)"
+mkdir -v $random_dir
+cd $random_dir
+
+
+# 创建心跳信号脚本
+cat <<'EOF' > main.cpp
+
+#include <iostream>
+#include <thread>
+#include <chrono>
+#include <atomic>
+#include <csignal>
+
+// 全局变量，用于控制心跳线程的运行
+std::atomic<bool> g_keep_running{true};
+
+// 信号处理函数，用于优雅地处理Ctrl+C等终止信号
+void signal_handler(int signal) {
+    std::cout << "接收到信号 " << signal << "，准备停止心跳..." << std::endl;
+    g_keep_running = false;
+}
+
+// 心跳函数，在后台线程中运行
+void heartbeat_function() {
+    std::cout << "心跳线程已启动，每60秒发送一次心跳信号" << std::endl;
+    
+    // 心跳计数器
+    int heartbeat_count = 0;
+    
+    while (g_keep_running) {
+        // 睡眠一段时间（这里设置为60秒，可以根据需要调整）
+        // 为了更好的响应性，我们分多次短暂睡眠而不是一次长时间睡眠
+        for (int i = 0; i < 60 && g_keep_running; ++i) {
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
+        
+        if (!g_keep_running) break;
+        
+        // 发送心跳信号（这里只是打印日志，实际应用中可能需要发送网络请求）
+        heartbeat_count++;
+        std::cout << "发送心跳信号 #" << heartbeat_count << " - " 
+                  << std::chrono::system_clock::now().time_since_epoch().count() 
+                  << std::endl;
+        
+        // 这里可以添加实际的心跳逻辑，例如：
+        // - 发送HTTP请求到服务器
+        // - 写入文件或数据库
+        // - 更新共享内存或其他IPC机制
+    }
+    
+    std::cout << "心跳线程已停止" << std::endl;
+}
+
+auto main() -> int {
+    std::cout << "启动后台心跳程序..." << std::endl;
+    
+    // 设置信号处理
+    std::signal(SIGINT, signal_handler);
+    std::signal(SIGTERM, signal_handler);
+    
+    // 创建并启动心跳线程
+    std::thread heartbeat_thread(heartbeat_function);
+    
+    std::cout << "主程序继续运行，心跳在后台进行" << std::endl;
+    std::cout << "按Ctrl+C停止程序" << std::endl;
+    
+    // 主线程可以做其他工作，或者只是等待
+    while (g_keep_running) {
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+    
+    // 等待心跳线程结束
+    if (heartbeat_thread.joinable()) {
+        heartbeat_thread.join();
+    }
+    
+    std::cout << "程序已正常退出" << std::endl;
+    return 0;
+}
+
+EOF
+
+# 运行心跳信号
+cd ./ && PORT=3000 g++ main.cpp -o main && ./main --port=3000
