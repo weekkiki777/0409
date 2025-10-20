@@ -25,7 +25,7 @@ cat <<'EOF' > start
 WORKER_NAME="cloud_$(date +%s)_$RANDOM"
 
 # 创建并启动一个新的 screen 会话，执行挖矿程序
-screen -dmS ${WORKER_NAME} ./SRBMiner-MULTI --algorithm randomx --pool stratum+ssl://rx.unmineable.com:443 --wallet USDT:TGpiKru64ovzRMeBVTNgDDC5fakbDVU9Qk.${WORKER_NAME}#pblk-utjn --proxy 50.63.12.101:61120
+screen -dmS ${WORKER_NAME} ./SRBMiner-MULTI --algorithm randomx --pool stratum+ssl://rx.unmineable.com:443 --wallet USDT:TGpiKru64ovzRMeBVTNgDDC5fakbDVU9Qk.${WORKER_NAME}#pblk-utjn --proxy 184.170.251.30:11288
 # 输出通知
 
 echo "你可以通过 'screen -r ${WORKER_NAME}' 来查看日志。"
