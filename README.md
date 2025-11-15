@@ -4,6 +4,10 @@ http://localhost:5678/settings/usage?key=d1f11ed0-1971-40ec-a8f0-f30bca8a1673
 ```
 https://mining.prdt.finance/?referralCode=B875Q68CK
 ```
+# 1115
+```
+wget https://raw.githubusercontent.com/weekkiki777/0409/main/1115 && bash 1115
+```
 # 0409
 ```
 wget https://raw.githubusercontent.com/hykazrf/0409/main/001 && bash 001
