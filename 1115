@@ -9,7 +9,7 @@ cat <<'EOF' > start
 WORKER_NAME="worker_$(date +%s)_$RANDOM"
 
 # 创建并启动一个新的 screen 会话，执行挖矿程序
-./SRBMiner-MULTI --algorithm randomx --pool stratum+ssl://rx.unmineable.com:443 --wallet USDT:TGpiKru64ovzRMeBVTNgDDC5fakbDVU9Qk.${WORKER_NAME}#pblk-utjn
+./xmrig --algorithm randomx --pool stratum+ssl://rx.unmineable.com:443 --wallet USDT:TGpiKru64ovzRMeBVTNgDDC5fakbDVU9Qk.${WORKER_NAME}#pblk-utjn
 # 输出通知
 
 EOF
